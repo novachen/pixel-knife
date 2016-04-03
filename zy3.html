@@ -5,7 +5,7 @@
 <head>
 
     <meta charset="utf-8">
-    <title>GF1集成定制系统</title>
+    <title>ZY3集成定制系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="像素刻刀工作室是依托中国科学院遥感与数字地球研究所的专门研究开发国产卫星相关高精准图像处理软件的工作室。">
     <meta name="keywords" content="像素刻刀,国产卫星,图像处理">
@@ -61,8 +61,6 @@
             <div class="navbar-collapse collapse" role="navigation">
                 <ul class="nav navbar-nav">
                     <li><a href="sat_intro.html" target="_blank" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'less'])">国产卫星介绍</a></li>
-                    <li><a href="paper.html" target="_blank" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'v4doc'])">文献资料索引</a></li>
-                    <li><a href="application.html" target="_blank" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'expo'])">应用实例</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right hidden-sm">
                     <li><a href="about.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'about'])">关于</a></li>
@@ -75,20 +73,28 @@
     <div class="container projects">
 
         <div class="projects-header page-header">
-            <h2>高分一号</h2>
+            <h2>资源三号</h2>
             <h2>集成定制系统</h2>
         </div>
 
         <div class="row">
 
             <h3>
-                海东青精细配准
+                ZY3介绍
             </h3>
-            <p>
-                海东青（FALCON）卫星影像精细配准系统：提供多传感器之间的精细几何矫正，误差减少到只有目前常用遥感软件1/10。
-            </p>
-
+                在中国资源卫星应用中心的网站上可以看到<a href='http://www.cresda.com/CN/Satellite/3070.shtml'>简单介绍</a>。
+				ZY3的主要目标是使用三线阵相机测量DEM，另外可以利用NAD的2.1米和MS的5.8米执行遥感任务。但是因为MS相机和NAD有一个8度左右的安装夹角，这导致NAD和MS的成像内容是不同的，它们的配准就比瞬时成像的系统难度要大，误差肯定也要大。
+				目前常见的文献中，都要把PAN和MS先做正射矫正，修正山体导致的形变，然后再用精细配准的方式进一步缩小误差。
+				而且即使做了这些工作，很多区域图像内容的实质性不同也是非常明显，比如高楼在NAD中是没有侧面的，而MS中却显现出来；比如水体放射太阳光的程度在NAD和MS中可能有很大的不同。
         </div>
+		
+        <div class="row">
+
+            <h3>
+                处理结果的比较
+            </h3>
+                
+		
     </div><!-- /.container -->
     <!-- Bootstrap core JavaScript
     ================================================== -->

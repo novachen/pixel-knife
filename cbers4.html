@@ -5,7 +5,7 @@
 <head>
 
     <meta charset="utf-8">
-    <title>GF1集成定制系统</title>
+    <title>CBERS4集成定制系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="像素刻刀工作室是依托中国科学院遥感与数字地球研究所的专门研究开发国产卫星相关高精准图像处理软件的工作室。">
     <meta name="keywords" content="像素刻刀,国产卫星,图像处理">
@@ -60,7 +60,6 @@
             </div>
             <div class="navbar-collapse collapse" role="navigation">
                 <ul class="nav navbar-nav">
-                    <li><a href="application.html" target="_blank" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'expo'])">应用实例</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right hidden-sm">
                     <li><a href="about.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'about'])">关于</a></li>
@@ -73,23 +72,32 @@
     <div class="container projects">
 
         <div class="projects-header page-header">
-            <h2>ZY1-02C</h2>
+            <h2>CBERS4</h2>
             <h2>集成定制系统</h2>
         </div>
 
         <div class="row">
 
             <h3>
-                ZY1-02C介绍
+                CBERS4介绍
             </h3>
-                在中国资源卫星应用中心的网站上可以看到<a href='http://www.cresda.com/CN/Satellite/3067.shtml'>简单介绍</a>。
-				它的主要难题在于，HR是用两个独立相机拍摄的，而PAN/MS是另外一个相机，要想把卫星的全部潜力发挥出来，就要同时做好三个相机，四组传感器的配准。而且每个传感器内部又是由多个CCD组成，它们之间还需要配准。
-				从分发的数据来看，预处理过程很复杂，产生出大量的辅助文件，但是最终使用的时候，还存在大量的内部形变没有消除，甚至可以说恶化了。
-				具体的一些实例可以看这个PPT中的内容：
-				
-				
-
+                在中国资源卫星应用中心的网站上可以看到<a href='http://www.cresda.com/CN/Satellite/4308.shtml'>简单介绍</a>。
+				CBERS4的两个主要相机质量都不错，中方的5米10米相机(后文简称CN)在ZY1-02C上就已经使用，巴西的20米相机(后文简称BR)成像的白平衡很好，只要在photoshop上简单拉伸一下就很令人满意。
+				主要的缺点就是CN相机缺少蓝色波段，只能制作成彩红外图像，除了专业搞遥感的人士以外都会觉得不易接受，而BR相机分辨率偏低，很多应用都不好开展。
+				我们设想通过融合两个相机的数据，形成5米分辨率的四波段完整的影像产品应该可以有一定的价值。
         </div>
+		
+        <div class="row">
+
+            <h3>
+                成果展示
+            </h3>
+				<a href="http://story.ceode.ac.cn:1809/tiles/doc/CBERS04_TrueColor.pptx">实验PPT</a>
+			
+			
+				
+        </div>
+
     </div><!-- /.container -->
     <!-- Bootstrap core JavaScript
     ================================================== -->

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no">
+
+    <title>高分二号配准融合效果比较</title>
+
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+	
+    <style>
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+		
+        .scrolly {
+            overflow-y: auto;
+        }
+		
+		.aw {
+			width: 100%;
+		}
+		
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+		
+		
+		.nopadding {
+			padding: 0;
+		}
+		
+		.story {
+			z-index:100;
+			position:absolute;
+			left:30px;
+			top:30px;
+			width:350px;
+			bottom:20px;
+			overflow-y: auto;
+			background:#FFF;
+			filter:alpha(Opacity=70);-moz-opacity:0.7;opacity: 0.7;
+		}
+		
+		.bigtext {
+			font-size: 2em;
+		}
+		
+    </style>
+</head>
+<body>
+<div class="row ah">
+    <div class="col-md-2 ah scrolly">
+    <button id="switchFlipBtn" class="btn btn-primary btn-lg btn-block">按这个按钮来选择是否切换显示</button>
+<div class = "page-header">
+<h2 class="text-center">高分二号配准融合效果比较</h2>
+</div>
+
+
+<h3 class="text-center">数据处理变成瓶颈</h3>
+　　高分二号是目前我国分辨率最高的民用对地观测卫星，垂直星下点成像时的分辨率达到0.8米。国家积极推进高分专项的应用工程，鼓励卫星用户积极使用卫星数据，以免费或者低价的方式把数据分发给用户。因此数据的来源已经不是瓶颈，但是数据质量却困扰着应用的大规模开展。<br/><br/>
+　　每颗国产卫星都有它特定的结构特点，已有的常用遥感软件比如ENVI/PCI等都主要针对国外的卫星设计，因此在应对国产卫星数据的时候很难有好的处理效果。<br/><br/>
+　　GF2上有PAN和MS两个传感器，为了得到最终的图像产品，需要对两个传感器实施配准和融合。<br/><br/>
+　　利用常用遥感软件ENVI上的多种工具和方法测试，很难得到较好的处理效果，有很多肉眼都很容易看出的缺陷。<br/><br/>
+
+<h3 class="text-center">实验方法</h3>
+　　1）不配准：左上是PAN和MS分别做正射后直接融合（使用ENVI5.3上最新推出的效果最好的NNDIFFUSE）的结果。<br/><br/>
+　　2）ENVI自动配准：右上是正射后，通过ENVI的自动配准工具配准，然后再NNDIFFUSE融合的结果。<br/><br/>
+　　3）ENVI手动配准：左下是正射后，用ENVI的配准工具，先手工找30个控制点，然后再自动寻找50个控制点，利用80个控制点建立二阶多项式进行几何校正，然后再NNDIFFUSE融合的结果。<br/><br/>
+　　4）我们的方法：右下是<b>像素刻刀</b>利用基于仿真的局部梯度追踪法配准，然后用多条件约束优化的融合方法，无人工干预全自动完成的结果。<br/><br/>
+　　前三幅图有切换效果，相对比的是<b>像素刻刀</b>的结果。<br/><br/>
+
+<h3 class="text-center">结果分析</h3>
+
+　　通过结果分析后可以看出，不配准（左上）可以看到很多鬼影，ENVI自动配准（右上）没有多少提高，人工找点（左下）有明显的提高但是依然和像素刻刀的方法（右下）的结果有差距。<br/><br/>
+　　<b>像素刻刀</b>使用了基于仿真的局部梯度跟踪方法来处理配准，再通过多条件约束优化的方法处理融合，可以全自动无人工干预地获得更理想的影像。<br/><br/>
+　　除了配准的因素以外，融合的保真度也很重要，<a href="http://blog.sina.com.cn/s/blog_764b1e9d0102v80g.html">NNDiffuse虽然宣传说颜色保真度高</a>，但是还是有很多与原始MS明显不一致的区域。<br/><br/>
+　　下面是可以点击查看的一些有特点的位置（主要看左下切换的对比）：
+<ul>
+<li><a onclick="javascript:hotPoint(0)" href="#">中国很少屋顶是粉色的</a></li>
+<li><a onclick="javascript:hotPoint(1)" href="#">小路边上的鬼影</a></li>
+<li><a onclick="javascript:hotPoint(2)" href="#">水体边上的鬼影</a></li>
+<li><a onclick="javascript:hotPoint(3)" href="#">树林的阴面变成显著的蓝色</a></li>
+</ul>
+
+<br/><br/>
+
+
+
+		
+	</div>
+    <div class="col-md-5 ah nopadding">
+		<div id="map1" class="aw hh"></div>
+		<div id="map3" class="aw hh"></div>
+	</div>
+    <div class="col-md-5 ah nopadding">
+		<div id="map2" class="aw hh"></div>
+		<div id="map4" class="aw hh"></div>
+	</div>
+</div>
+
+<script>
+	var hotpt = [[3764,6000-2479],[4630,6000-2250],[2887,6000-3501],[2319,6000-3367]];
+    var extent = [0, 0, 512*16, 512*16];
+    var projection = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+    });
+	
+	tilebase = 'http://story.ceode.ac.cn:1809/tiles/gf2_flip/';
+	source1 = new ol.source.XYZ({
+			    attributions: [
+					new ol.Attribution({
+						html: '不配准'
+					})
+				],
+              url: tilebase+'rpcOnly/{z}/{x}/{-y}.png',
+			  projection: projection
+            });
+	source2 = new ol.source.XYZ({
+			    attributions: [
+					new ol.Attribution({
+						html: 'ENVI自动配准'
+					})
+				],
+              url: tilebase+'rpcAuto/{z}/{x}/{-y}.png',
+			  projection: projection
+            });
+	source3 = new ol.source.XYZ({
+			    attributions: [
+					new ol.Attribution({
+						html: '手动找点配准'
+					})
+				],
+              url: tilebase+'rpcManual/{z}/{x}/{-y}.png',
+			  projection: projection
+            });
+	source4 = new ol.source.XYZ({
+			    attributions: [
+					new ol.Attribution({
+						html: '像素刻刀全自动'
+					})
+				],
+              url: tilebase+'falcon/{z}/{x}/{-y}.png',
+			  projection: projection
+            });
+
+	layer1 = new ol.layer.Tile({
+        source: source1
+    });
+
+    layer2 = new ol.layer.Tile({
+        source: source2
+    });
+
+    layer3 = new ol.layer.Tile({
+        source: source3
+    });
+
+    layer4 = new ol.layer.Tile({
+        source: source4
+    });
+	
+    layer5 = new ol.layer.Tile({
+        source: source4
+    });
+
+    view = new ol.View({
+		projection: projection,
+        center: [3000,3000],
+        zoom: 5
+    });
+	
+	var attribution = new ol.control.Attribution({
+        collapsible: false
+      });
+
+	var map1 = new ol.Map({
+		target: 'map1',
+		layers: [
+			new ol.layer.Group({
+				layers: [
+					layer1,
+					layer5
+				]
+			})
+		],
+		view: view,
+	});
+
+	var map2 = new ol.Map({
+		target: 'map2',
+		layers: [
+			new ol.layer.Group({
+				layers: [
+					layer2,
+					layer5
+				]
+			})
+		],
+		view: view,
+	});
+
+	var map3 = new ol.Map({
+		target: 'map3',
+		layers: [
+			new ol.layer.Group({
+				layers: [
+					layer3,
+					layer5
+				]
+			})
+		],
+		view: view
+	});
+
+	var map4 = new ol.Map({
+		target: 'map4',
+		layers: [
+			new ol.layer.Group({
+				layers: [
+					layer4
+				]
+			})
+		],
+		view: view
+	});
+
+	layer5.setVisible(true);
+	layer4.setVisible(true);
+	layer1.setVisible(false);
+	layer2.setVisible(false);
+	layer3.setVisible(false);
+	
+
+	doFlip = true;
+    setInterval('flipImage()', 1000);
+
+    function flipImage() {
+		if (doFlip)
+		{
+			if (layer5.getVisible())
+			{
+				layer1.setVisible(!layer1.getVisible());
+				layer2.setVisible(!layer2.getVisible());
+				layer3.setVisible(!layer3.getVisible());
+				layer5.setVisible(!layer5.getVisible());
+			}
+			else
+			{
+				layer5.setVisible(!layer5.getVisible());
+				layer1.setVisible(!layer1.getVisible());
+				layer2.setVisible(!layer2.getVisible());
+				layer3.setVisible(!layer3.getVisible());
+			}
+		}
+    }
+
+	function stopFlip()
+	{
+		doFlip = false;
+		layer5.setVisible(false);
+		layer4.setVisible(true);
+		layer1.setVisible(true);
+		layer2.setVisible(true);
+		layer3.setVisible(true);
+	}
+	
+	function runFlip()
+	{
+		doFlip = true;
+	}
+	
+	var switchBtn = document.getElementById('switchFlipBtn');
+    switchBtn.addEventListener('click', function() {	
+		if (doFlip)
+			stopFlip();
+		else
+			runFlip();
+	});
+
+	function hotPoint(h)
+	{
+        var duration = 2000;
+        var start = +new Date();
+        var pan = ol.animation.pan({
+          duration: duration,
+          source: /** @type {ol.Coordinate} */ (view.getCenter()),
+          start: start
+        });
+		var st_pos = view.getCenter();
+		var dx = st_pos[0]-hotpt[h][0];
+		var dy = st_pos[1]-hotpt[h][1];
+		var d = Math.sqrt(dx*dx + dy*dy);
+		var s = Math.min(1+d/500,1.5);
+        var bounce = ol.animation.bounce({
+          duration: duration,
+          resolution: s * view.getResolution(),
+          start: start
+        });
+		map1.beforeRender(pan, bounce);
+		map2.beforeRender(pan, bounce);
+		map3.beforeRender(pan, bounce);
+		map4.beforeRender(pan, bounce);
+        view.setCenter(hotpt[h]);
+	}
+	
+    </script>
+  </body>
+</html>

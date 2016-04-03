@@ -5,7 +5,7 @@
 <head>
 
     <meta charset="utf-8">
-    <title>GF1集成定制系统</title>
+    <title>Pleiades集成定制系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="像素刻刀工作室是依托中国科学院遥感与数字地球研究所的专门研究开发国产卫星相关高精准图像处理软件的工作室。">
     <meta name="keywords" content="像素刻刀,国产卫星,图像处理">
@@ -60,7 +60,7 @@
             </div>
             <div class="navbar-collapse collapse" role="navigation">
                 <ul class="nav navbar-nav">
-                    <li><a href="application.html" target="_blank" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'expo'])">应用实例</a></li>
+                    <li><a href="sat_intro.html" target="_blank" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'less'])">国产卫星介绍</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right hidden-sm">
                     <li><a href="about.html" onclick="_hmt.push(['_trackEvent', 'navbar', 'click', 'about'])">关于</a></li>
@@ -73,23 +73,31 @@
     <div class="container projects">
 
         <div class="projects-header page-header">
-            <h2>ZY1-02C</h2>
+            <h2>Pleiades</h2>
             <h2>集成定制系统</h2>
         </div>
 
         <div class="row">
 
             <h3>
-                ZY1-02C介绍
+                Pleiades介绍
             </h3>
-                在中国资源卫星应用中心的网站上可以看到<a href='http://www.cresda.com/CN/Satellite/3067.shtml'>简单介绍</a>。
-				它的主要难题在于，HR是用两个独立相机拍摄的，而PAN/MS是另外一个相机，要想把卫星的全部潜力发挥出来，就要同时做好三个相机，四组传感器的配准。而且每个传感器内部又是由多个CCD组成，它们之间还需要配准。
-				从分发的数据来看，预处理过程很复杂，产生出大量的辅助文件，但是最终使用的时候，还存在大量的内部形变没有消除，甚至可以说恶化了。
-				具体的一些实例可以看这个PPT中的内容：
+                在空客空间防务的网站上可以看到<a href='http://www.geo-airbusds.com/cn/2282-pleiades-very-high-resolution-satellite-imagery'>简单介绍</a>。
+				Pleiades的正射产品的MS和PAN之间依然有一定的几何误差，而且其官方标准的融合产品在颜色上有明显的欠缺，甚至有的地方可以误导使用者的视力判决。
 				
-				
-
         </div>
+		
+        <div class="row">
+
+            <h3>
+                和官方样本范例的比较
+            </h3>
+			在官方网站上可以找到<a href='http://www.geo-airbusds.com/cn/2444-sample-imagery'>样本数据</a>下载。这里有一组澳洲的数据，各级产品都有。我们以其中正射的数据集作为输入，将其配准融合，然后与官方提供的融合产品比较。
+			
+			
+				
+        </div>
+
     </div><!-- /.container -->
     <!-- Bootstrap core JavaScript
     ================================================== -->
