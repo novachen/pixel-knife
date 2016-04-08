@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>zy1-02c 融合结果比较</title>
+
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+
+        #layertree li > span {
+            cursor: pointer;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+		
+        .scrolly {
+            overflow-y: auto;
+        }
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+		
+		.nopadding {
+			padding: 0;
+		}
+		
+    </style>
+</head>
+<body>
+
+<div class="row ah">
+    <div class="col-md-2 ah scrolly">
+	
+<h1>zy1-02c 融合结果比较</h1>
+
+
+<p>
+左边是资源卫星中心制作的ZY1-02C的宣传海报上的标准融合产品图像，现在在<a href="http://www.cresda.com/CN/sjfw/yxzt/index.shtml">http://www.cresda.com/CN/sjfw/yxzt/index.shtml</a>还能看到。<br/><br/>
+右边是像素刻刀的产品图像，由软件自动完成的，不需要人工干预。<br/><br/>
+由于海报上没有坐标系，因此没法做成联动关系，只能两边分别操作比较。<br/><br/>
+更细节的内容见<a href='http://story.ceode.ac.cn:1809/tiles/doc/zy1_02c/zy02c融合比较.ppt'>zy02c融合比较.ppt</a> <br/><br/>
+
+
+</p>	
+
+
+
+	</div>
+	
+    <div class="col-md-10 ah">
+        <div class="col-md-6 ah nopadding">
+            <div id="map2" class="map"></div>
+        </div>
+        <div class="col-md-6 ah nopadding">
+            <div id="map" class="map"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var extent1 = [0, 0, 3285, 3285];
+    var projection1 = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent1
+    });
+
+    source1 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '像素刻刀产品'
+            })
+        ],
+        url: 'img/zy02c_bjair_nature.jpg',
+        projection: projection1,
+        imageExtent: extent1
+    });
+
+    layer1 = new ol.layer.Image({
+        source: source1
+    });
+
+    view1 = new ol.View({
+        projection: projection1,
+        center: [2408,3285-2309],
+        zoom: 4
+    });
+
+    var map1 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer1
+                ]
+
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map',
+        view: view1
+    });
+
+	//===================================================
+	
+    var extent2 = [0, 0, 3000, 3000];
+    var projection2 = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent2
+    });
+
+    source2 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '资源卫星中心海报'
+            })
+        ],
+        url: 'img/n179950.jpg',
+        projection: projection2,
+        imageExtent: extent2
+    });
+
+    layer2 = new ol.layer.Image({
+        source: source2
+    });
+
+    view2 = new ol.View({
+        projection: projection2,
+        center: [2202,3000-2058],
+        zoom: 4/2.5*2.4
+    });
+
+    var map2 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer2
+                ]
+
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map2',
+        view: view2
+    });	
+</script>
+</body>
+</html>
