@@ -113,7 +113,9 @@
         source: source1
     });
 
-
+	var attribution1 = new ol.control.Attribution({
+		collapsed: false
+	});
 
     var map_psh = new ol.Map({
         layers: [
@@ -124,7 +126,8 @@
 
             })
         ],
-        renderer: 'canvas',
+  		controls:  ol.control.defaults({attribution: false}).extend([attribution1]),
+		renderer: 'canvas',
         target: 'map_psh',
         view: view
     });
@@ -146,6 +149,10 @@
         source: source2
     });
 
+	var attribution2 = new ol.control.Attribution({
+		collapsed: false
+	});
+	
     var map_psh2 = new ol.Map({
         layers: [
             new ol.layer.Group({
@@ -155,6 +162,7 @@
 
             })
         ],
+ 		controls:  ol.control.defaults({attribution: false}).extend([attribution2]),		
         renderer: 'canvas',
         target: 'map_psh2',
         view: view
@@ -177,6 +185,10 @@
         source: source3
     });
 
+	var attribution3 = new ol.control.Attribution({
+		collapsed: false
+	});
+	
     var map_ms = new ol.Map({
         layers: [
             new ol.layer.Group({
@@ -186,6 +198,7 @@
 
             })
         ],
+ 		controls:  ol.control.defaults({attribution: false}).extend([attribution3]),		
         renderer: 'canvas',
         target: 'map_ms',
         view: view
@@ -208,6 +221,10 @@
         source: source4
     });
 
+	var attribution4 = new ol.control.Attribution({
+		collapsed: false
+	});
+	
     var map_pan = new ol.Map({
         layers: [
             new ol.layer.Group({
@@ -217,6 +234,7 @@
 
             })
         ],
+ 		controls:  ol.control.defaults({attribution: false}).extend([attribution4]),
         renderer: 'canvas',
         target: 'map_pan',
         view: view

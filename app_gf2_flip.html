@@ -186,10 +186,19 @@
         zoom: 5
     });
 	
-	var attribution = new ol.control.Attribution({
-        collapsible: false
-      });
-
+	var attribution1 = new ol.control.Attribution({
+		collapsed: false
+	});
+	var attribution2 = new ol.control.Attribution({
+		collapsed: false
+	});
+	var attribution3 = new ol.control.Attribution({
+		collapsed: false
+	});
+	var attribution4 = new ol.control.Attribution({
+		collapsed: false
+	});	
+	
 	var map1 = new ol.Map({
 		target: 'map1',
 		layers: [
@@ -200,6 +209,7 @@
 				]
 			})
 		],
+  		controls:  ol.control.defaults({attribution: false}).extend([attribution1]),
 		view: view,
 	});
 
@@ -213,6 +223,7 @@
 				]
 			})
 		],
+  		controls:  ol.control.defaults({attribution: false}).extend([attribution2]),
 		view: view,
 	});
 
@@ -226,6 +237,7 @@
 				]
 			})
 		],
+  		controls:  ol.control.defaults({attribution: false}).extend([attribution3]),
 		view: view
 	});
 
@@ -238,6 +250,7 @@
 				]
 			})
 		],
+  		controls:  ol.control.defaults({attribution: false}).extend([attribution4]),
 		view: view
 	});
 

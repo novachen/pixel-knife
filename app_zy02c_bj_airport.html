@@ -109,6 +109,10 @@
         zoom: 4
     });
 
+	var attribution1 = new ol.control.Attribution({
+		collapsed: false
+	});
+
     var map1 = new ol.Map({
         layers: [
             new ol.layer.Group({
@@ -118,7 +122,8 @@
 
             })
         ],
-        renderer: 'canvas',
+ 		controls:  ol.control.defaults({attribution: false}).extend([attribution1]),
+		renderer: 'canvas',
         target: 'map',
         view: view1
     });
@@ -153,6 +158,10 @@
         zoom: 4/2.5*2.4
     });
 
+	var attribution2 = new ol.control.Attribution({
+		collapsed: false
+	});
+	
     var map2 = new ol.Map({
         layers: [
             new ol.layer.Group({
@@ -162,6 +171,7 @@
 
             })
         ],
+		controls:  ol.control.defaults({attribution: false}).extend([attribution2]),
         renderer: 'canvas',
         target: 'map2',
         view: view2
