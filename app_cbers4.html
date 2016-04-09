@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
 
-    <title>Pleiades 融合结果比较</title>
+    <title>CBERS4 从三波段到四波段</title>
 
     <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -48,44 +48,33 @@
 <div class="row ah">
     <div class="col-md-2 ah scrolly">
 <div class="projects-header page-header">	 
-<h1 class="text-center">Pleiades 融合结果比较</h1>
+<h1 class="text-center">CBERS4融合</h1>
+<h2 class="text-center">从三波段到四波段</h2>
 </div>
 
 <p>
-四张图像数据大概40MB，网速慢的电脑<b>可能需要等待</b>。<br/><br/>
-上排是从<a href='http://www.geo-airbusds.com/cn/2444-sample-imagery'>AIRBUS网站</a>下载的示例正射产品，左上方是PAN(0.5米分辨率)，右上方是MS（2米分辨率）<br/><br/>
-右下方是像素刻刀的融合（复原）的结果。为啥用了复原这个词呢？因为我们追求的是像一个0.5米的4波段多光谱理想相机直接拍摄的影像，也就是生成一个波谱和MS非常接近，只是分辨率增加到PAN级别的多光谱产品。和上排的两个图比较，可以看到像素刻刀结果和MS的波谱是非常接近的。<br/><br/>
-左下方是AIRBUS官方的融合产品，从波谱的保真角度出发，整张图和原来的MS差异较大，明显偏亮了很多，已经失去了量化分析的价值，而且即使只从目视分析角度出发也有明显的问题。<br/><br/>
-下面我们放大观察一些细节区域：<br/><br/>
-<ul>
-<li><a onclick="javascript:hotPoint(0)" href="#">彩色显著地溢出到道路上</a></li>
-<li><a onclick="javascript:hotPoint(1)" href="#">一些小物体的颜色不见了</a></li>
-<li><a onclick="javascript:hotPoint(2)" href="#">有不少地方过饱和，比如天线的结构不完整了</a></li>
-</ul>
-
-<br/><br/>
-这个区域更高分辨率的实际情况可以在GOOGLE EARTH上看，其中心位置在东经144.956南纬37.823。这里有一个<a href='img/GE_pleiades.jpg'>截屏</a>可以参考一下。
-</p>	
-
+　　CBERS4是中国和巴西共同研制和运营的卫星，其中的中方的5/10米相机没有蓝色波段，而巴西的20米相机有蓝色波段。通常来说扫描范围大的20米相机能够覆盖5/10米相机的地理范围，所以我们可以通过算法融合两个相机的内容，形成虚拟的5米分辨率4波段的理想相机。这样我们就可以生成群众更容易接受的真彩色图像。<br/><br/>
+　　左上方是中方的10米多光谱传感器的内容，右上方是中方5米全色传感器的内容。<br/><br/>
+　　左下方是巴西的20米多光谱传感器的内容，右下方是<b>像素刻刀</b>的三传感器融合后生成的真彩色5米影像。<br/><br/>
+　　这里显示的是2016年2月24日的重庆机场的建设情况，对于西南等云雾较多地方，通过多次观测增加看清地物内容的机会很重要，CBERS4的5米分辨率虽然相对较低，但也是对目前主力对地观测卫星的有力补充。<br/><br/>
 
 
 	</div>
 	
     <div class="col-md-10 ah">
         <div class="col-md-6 ah nopadding">
-			<div id="map_pan" class="map hh"></div>
-            <div id="map_psh" class="map hh"></div>
+			<div id="map_mux10" class="map hh"></div>
+            <div id="map_pan5" class="map hh"></div>
         </div>
         <div class="col-md-6 ah nopadding">
-			<div id="map_ms" class="map hh"></div>
-            <div id="map_psh2" class="map hh"></div>
+			<div id="map_mux20" class="map hh"></div>
+            <div id="map_psh5" class="map hh"></div>
         </div>
     </div>
 </div>
 
 <script>
 
-	var hotpt = [[1491,4000-387],[1702,4000-919],[1016,4000-2062]];
     var extent1 = [0, 0, 4000, 4000];
     var projection1 = new ol.proj.Projection({
         code: 'xkcd-image',
@@ -97,14 +86,14 @@
         center: [2000,2000],
         zoom: 3
     });
-	
+	  
     source1 = new ol.source.ImageStatic({
         attributions: [
             new ol.Attribution({
-                html: 'AIRBUS融合结果'
+                html: '中方10米彩红外多光谱'
             })
         ],
-        url: 'img/pleiades/out_psh.jpg',
+        url: 'img/cbers4/cbers4_mux10.jpg',
         projection: projection1,
         imageExtent: extent1
     });
@@ -113,9 +102,11 @@
         source: source1
     });
 
+	var attribution1 = new ol.control.Attribution({
+		collapsed: false
+	});
 
-
-    var map_psh = new ol.Map({
+    var map_mux10 = new ol.Map({
         layers: [
             new ol.layer.Group({
                 layers: [
@@ -124,8 +115,9 @@
 
             })
         ],
+		controls:  ol.control.defaults({attribution: false}).extend([attribution1]),
         renderer: 'canvas',
-        target: 'map_psh',
+        target: 'map_mux10',
         view: view
     });
 
@@ -134,10 +126,10 @@
     source2 = new ol.source.ImageStatic({
         attributions: [
             new ol.Attribution({
-                html: '像素刻刀融合结果'
+                html: '中方5米全色'
             })
         ],
-        url: 'img/pleiades/out_psh2.jpg',
+        url: 'img/cbers4/cbers4_pan5.jpg',
         projection: projection1,
         imageExtent: extent1
     });
@@ -146,7 +138,11 @@
         source: source2
     });
 
-    var map_psh2 = new ol.Map({
+	var attribution2 = new ol.control.Attribution({
+		collapsed: false
+	});
+
+    var map_pan5 = new ol.Map({
         layers: [
             new ol.layer.Group({
                 layers: [
@@ -155,8 +151,9 @@
 
             })
         ],
+		controls:  ol.control.defaults({attribution: false}).extend([attribution2]),
         renderer: 'canvas',
-        target: 'map_psh2',
+        target: 'map_pan5',
         view: view
     });	
 	
@@ -165,10 +162,10 @@
     source3 = new ol.source.ImageStatic({
         attributions: [
             new ol.Attribution({
-                html: 'MS'
+                html: '巴西20米四波段多光谱'
             })
         ],
-        url: 'img/pleiades/out_ms.jpg',
+        url: 'img/cbers4/cbers4_mux20.jpg',
         projection: projection1,
         imageExtent: extent1
     });
@@ -176,6 +173,10 @@
     layer3 = new ol.layer.Image({
         source: source3
     });
+
+	var attribution3 = new ol.control.Attribution({
+		collapsed: false
+	});
 
     var map_ms = new ol.Map({
         layers: [
@@ -186,8 +187,9 @@
 
             })
         ],
+		controls:  ol.control.defaults({attribution: false}).extend([attribution3]),
         renderer: 'canvas',
-        target: 'map_ms',
+        target: 'map_mux20',
         view: view
     });
 	
@@ -196,10 +198,10 @@
     source4 = new ol.source.ImageStatic({
         attributions: [
             new ol.Attribution({
-                html: 'PAN'
+                html: '像素刻刀融合结果'
             })
         ],
-        url: 'img/pleiades/out_pan.jpg',
+        url: 'img/cbers4/cbers4_psh5.jpg',
         projection: projection1,
         imageExtent: extent1
     });
@@ -207,8 +209,11 @@
     layer4 = new ol.layer.Image({
         source: source4
     });
+	var attribution4 = new ol.control.Attribution({
+		collapsed: false
+	});
 
-    var map_pan = new ol.Map({
+    var map_psh5 = new ol.Map({
         layers: [
             new ol.layer.Group({
                 layers: [
@@ -217,8 +222,9 @@
 
             })
         ],
+		controls:  ol.control.defaults({attribution: false}).extend([attribution4]),
         renderer: 'canvas',
-        target: 'map_pan',
+        target: 'map_psh5',
         view: view
     });
 
