@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>ZY3 海报比较</title>
+
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+
+        #layertree li > span {
+            cursor: pointer;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+		
+        .scrolly {
+            overflow-y: auto;
+        }
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+		
+		.nopadding {
+			padding: 0;
+		}
+		
+    </style>
+</head>
+<body>
+
+<div class="row ah">
+    <div class="col-md-2 ah scrolly">
+<div class="projects-header page-header">	 
+<h1 class="text-center">ZY3 海报比较</h1>
+</div>
+
+<p>
+ZY3的业主单位是国家测绘地理信息局，2012年制作了一些ZY3的产品海报。<br/><br/>
+左边是发布的一张海报内容，右边是像素刻刀制作的融合结果。<br/><br/>
+海报的主要问题应该是配准不整齐，有很多物体都有红边效应。<br/><br/>
+
+	</div>
+	
+    <div class="col-md-10 ah">
+        <div class="col-md-6 ah nopadding">
+			<div id="map1" class="map ah"></div>
+        </div>
+        <div class="col-md-6 ah nopadding">
+			<div id="map2" class="map ah"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+	var extent1 = [0, 0, 2551, 2820];
+    var projection1 = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent1
+    });
+    view1 = new ol.View({
+        projection: projection1,
+        center: [1225,2000],
+        zoom: 3
+    });
+	  
+    source1 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '海报'
+            })
+        ],
+        url: 'img/zy3/beijing/0223.jpg',
+        projection: projection1,
+        imageExtent: extent1
+    });
+
+    layer1 = new ol.layer.Image({
+        source: source1
+    });
+
+	var attribution1 = new ol.control.Attribution({
+		collapsed: false
+	});
+
+    var map1 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer1
+                ]
+
+            })
+        ],
+		controls:  ol.control.defaults({attribution: false}).extend([attribution1]),
+        renderer: 'canvas',
+        target: 'map1',
+        view: view1
+    });
+
+	//===================================================
+	
+	var extent2 = [0, 0, 3000, 3000];
+    var projection2 = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent2
+    });
+    view2 = new ol.View({
+        projection: projection1,
+        center: [1500,1500],
+        zoom: 3
+    });
+    source2 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '像素刻刀融合'
+            })
+        ],
+        url: 'img/zy3/beijing/cut.jpg',
+        projection: projection2,
+        imageExtent: extent2
+    });
+
+    layer2 = new ol.layer.Image({
+        source: source2
+    });
+
+	var attribution2 = new ol.control.Attribution({
+		collapsed: false
+	});
+
+    var map2 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer2
+                ]
+
+            })
+        ],
+		controls:  ol.control.defaults({attribution: false}).extend([attribution2]),
+        renderer: 'canvas',
+        target: 'map2',
+        view: view2
+    });	
+	
+	//===================================================
+
+	function hotPoint(h)
+	{
+		view.setZoom(5);
+        var duration = 1000;
+        var start = +new Date();
+        var pan = ol.animation.pan({
+          duration: duration,
+          source: /** @type {ol.Coordinate} */ (view.getCenter()),
+          start: start
+        });
+		var st_pos = view.getCenter();
+		var dx = st_pos[0]-hotpt[h][0];
+		var dy = st_pos[1]-hotpt[h][1];
+		var d = Math.sqrt(dx*dx + dy*dy);
+		var s = Math.min(1+d/500,1.5);
+        var bounce = ol.animation.bounce({
+          duration: duration,
+          resolution: s * view.getResolution(),
+          start: start
+        });
+		map_mux10.beforeRender(pan, bounce);
+		map_pan5.beforeRender(pan, bounce);
+		map_mux20.beforeRender(pan, bounce);
+		map_psh5.beforeRender(pan, bounce);
+        view.setCenter(hotpt[h]);
+	}	
+</script>
+</body>
+</html>
