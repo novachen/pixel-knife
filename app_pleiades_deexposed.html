@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>Pleiades 无饱和制图</title>
+
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+
+        #layertree li > span {
+            cursor: pointer;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+		
+        .scrolly {
+            overflow-y: auto;
+        }
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+		
+		.nopadding {
+			padding: 0;
+		}
+		
+    </style>
+</head>
+<body>
+
+<div class="row ah">
+    <div class="col-md-2 ah scrolly">
+		<div class="projects-header page-header">	 
+		<h1 class="text-center">Pleiades 无饱和制图</h1>
+		</div>
+
+		<p>
+		得到融合图像后还需要调色、拉伸等制图工序。遥感图像的位深通常超过8位，有很亮的物体但是只占整个图像的小部分，常规的直方图拉伸会牺牲掉这些区域的纹理。我们设计的局部非线性调整的方法可以在整体色彩亮度令人满意的情况下，还能保持明亮区域的纹理信息。<br/><br/>
+		图像较大，网速慢的电脑<b>可能需要等待</b>。<br/><br/>
+		左上方是融合后的结果，右上方是通过photoshop直接直方图拉伸调整后的结果。<br/><br/>
+		左下方是通过像素刻刀的无饱和制图调整后的结果，右下方是两个结果的切换比较。<br/><br/>
+	</div>
+
+
+	
+    <div class="col-md-10 ah">
+        <div class="col-md-6 ah nopadding">
+			<div id="map_recover" class="map hh"></div>
+            <div id="map_deexposed" class="map hh"></div>
+        </div>
+        <div class="col-md-6 ah nopadding">
+			<div id="map_ps" class="map hh"></div>
+            <div id="map_flip" class="map hh"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+	var hotpt = [[1491,4000-387],[1702,4000-919],[1016,4000-2062]];
+    var extent1 = [0, 0, 4000, 4000];
+    var projection1 = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent1
+    });
+    view = new ol.View({
+        projection: projection1,
+        center: [2000,2000],
+        zoom: 3
+    });
+	
+    source1 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '像素刻刀融合结果'
+            })
+        ],
+        url: 'img/pleiades/out_psh2.jpg',
+        projection: projection1,
+        imageExtent: extent1
+    });
+
+    layer1 = new ol.layer.Image({
+        source: source1
+    });
+
+	var attribution1 = new ol.control.Attribution({
+		collapsed: false
+	});
+
+    var map_recover = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer1
+                ]
+
+            })
+        ],
+  		controls:  ol.control.defaults({attribution: false}).extend([attribution1]),
+		renderer: 'canvas',
+        target: 'map_recover',
+        view: view
+    });
+
+	//===================================================
+	
+    source2 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: 'photoshop直方图拉伸'
+            })
+        ],
+        url: 'img/pleiades/exposed.jpg',
+        projection: projection1,
+        imageExtent: extent1
+    });
+
+    layer2 = new ol.layer.Image({
+        source: source2
+    });
+
+	var attribution2 = new ol.control.Attribution({
+		collapsed: false
+	});
+	
+    var map_ps = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer2
+                ]
+
+            })
+        ],
+ 		controls:  ol.control.defaults({attribution: false}).extend([attribution2]),		
+        renderer: 'canvas',
+        target: 'map_ps',
+        view: view
+    });	
+	
+//========================
+	
+    source3 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '无饱和制图'
+            })
+        ],
+        url: 'img/pleiades/deexposed.jpg',
+        projection: projection1,
+        imageExtent: extent1
+    });
+
+    layer3 = new ol.layer.Image({
+        source: source3
+    });
+
+	var attribution3 = new ol.control.Attribution({
+		collapsed: false
+	});
+	
+    var map_deexposed = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer3
+                ]
+
+            })
+        ],
+ 		controls:  ol.control.defaults({attribution: false}).extend([attribution3]),		
+        renderer: 'canvas',
+        target: 'map_deexposed',
+        view: view
+    });
+	
+//========================
+
+    layer4 = new ol.layer.Image({
+        source: source2
+    });
+    layer5 = new ol.layer.Image({
+        source: source3
+    });
+
+	var attribution4 = new ol.control.Attribution({
+		collapsed: false
+	});
+	
+    var map_flip = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer4,
+					layer5
+                ]
+
+            })
+        ],
+ 		controls:  ol.control.defaults({attribution: false}).extend([attribution4]),
+        renderer: 'canvas',
+        target: 'map_flip',
+        view: view
+    });
+
+//=================
+	doFlip = true;
+    setInterval('flipImage()', 1000);
+
+	layer5.setVisible(false);
+	layer4.setVisible(true);	
+
+    function flipImage() {
+		if (doFlip)
+		{
+			layer4.setVisible(!layer4.getVisible());
+			layer5.setVisible(!layer5.getVisible());
+		}
+    }
+	
+	function hotPoint(h)
+	{
+		view.setZoom(6);
+        var duration = 1000;
+        var start = +new Date();
+        var pan = ol.animation.pan({
+          duration: duration,
+          source: /** @type {ol.Coordinate} */ (view.getCenter()),
+          start: start
+        });
+		var st_pos = view.getCenter();
+		var dx = st_pos[0]-hotpt[h][0];
+		var dy = st_pos[1]-hotpt[h][1];
+		var d = Math.sqrt(dx*dx + dy*dy);
+		var s = Math.min(1+d/500,1.5);
+        var bounce = ol.animation.bounce({
+          duration: duration,
+          resolution: s * view.getResolution(),
+          start: start
+        });
+		map_ms.beforeRender(pan, bounce);
+		map_pan.beforeRender(pan, bounce);
+		map_psh.beforeRender(pan, bounce);
+		map_psh2.beforeRender(pan, bounce);
+        view.setCenter(hotpt[h]);
+	}	
+</script>
+</body>
+</html>
