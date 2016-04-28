@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
 
-    <title>D10示例之渤海海冰</title>
+    <title>M1示例之重庆江北机场</title>
 
     <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -49,20 +49,20 @@
     <div class="col-md-2 ah scrolly">
 	<button id="switchFlipBtn" class="btn btn-primary btn-lg btn-block">选择是否切换显示</button>
 		<div class="projects-header page-header">	 
-		<h2 class="text-center">D10示例之</h2>
-		<h2 class="text-center">渤海海冰</h2>
+		<h2 class="text-center">M1示例之</h2>
+		<h2 class="text-center">重庆江北机场</h2>
 		</div>
 
 		<p>
-		　　对于海冰等变化较快的地物，以前通常只能使用气象卫星或者像MODIS这样的低空间分辨率（500米）高空间分辨率（每日）来观测。用这样的数据可以得到大范围的统计数据，但是难以指导实际的灾害救助工作。<br/><br/>
-		　　目前国内外各国的卫星数据通过共享协议实现了一个实际上的卫星群，通过组织这样的卫星群的观测数据，可以在10米尺度上实现或者接近每日一次的观测。这样的数据集在很多场合能发挥重大的效用。<br/><br/>
-		　　Pixel-Knife推出的D10数据集包含以下卫星：<br/>
+		　　中国目前还处于大规模基建的阶段，可以通过遥感卫星手段跟踪重大工程的进展情况。<br/><br/>
+		　　综合我国发射的众多陆地卫星，可以形成一个1米尺度上每月观测的虚拟装置，<br/><br/>
+		　　Pixel-Knife推出的M1数据集包含以下卫星：<br/>
 		<ul>
-			<li>HJ1A/HJ1B 30米</li>
-			<li>LANDSAT7/LANDSAT8 15~30米</li>
-			<li>GF1-WFV 16米</li>
-			<li>CBERS4-WFI 73米</li>
-			<li>SENTINEL2 10米</li>
+			<li>高分一号 2米</li>
+			<li>高分二号 0.8米</li>
+			<li>CBERS4 5米</li>
+			<li>ZY1-02C 2.36米</li>
+			<li>ZY3 2.1米</li>
 		<ul/>
 	</div>
 
@@ -75,9 +75,9 @@
 
 <script>
 
-	nameArray = new Array("20151231_L7.jpg","20160101_CBERS4.jpg","20160102_GF1.jpg","20160104_CBERS4.jpg","20160106_GF1.jpg","20160108_L8.jpg","20160109_GF1.jpg","20160109_HJ.jpg","20160110_CBERS4.jpg","20160110_GF1.jpg","20160111_HJ.jpg","20160112_HJ.jpg","20160113_CBERS4.jpg","20160113_HJ.jpg","20160114_HJ.jpg","20160115_L8.jpg","20160118_GF1.jpg","20160119_CBERS4.jpg","20160120_HJ.jpg","20160122_CBERS4.jpg","20160123_L7.jpg","20160124_CBERS4.jpg","20160124_HJ.jpg","20160124_L8.jpg","20160125_CBERS4.jpg","20160125_GF1.jpg","20160126_HJ.jpg","20160127_CBERS4.jpg","20160127_HJ.jpg","20160129_GF1.jpg","20160130_CBERS4.jpg","20160130_GF1.jpg","20160131_L8.jpg","20160201_L7.jpg");
+	nameArray = new Array("20150428_GF1.jpg","20150711_GF1.jpg","20150731_CBERS4.jpg","20160224_CBERS4.jpg");
 
-    var extent1 = [0, 0, 4000, 4000];
+    var extent1 = [0, 0, 3000, 3000];
     var projection1 = new ol.proj.Projection({
         code: 'xkcd-image',
         units: 'pixels',
@@ -85,7 +85,7 @@
     });
     view = new ol.View({
         projection: projection1,
-        center: [2000,2000],
+        center: [1500,1500],
         zoom: 3
     });
 
@@ -100,7 +100,7 @@
 					html: nameArray[i]
 				})
 			],
-			url: 'img/d10/seaice/'+nameArray[i],
+			url: 'img/m1/cqair/'+nameArray[i],
 			projection: projection1,
 			imageExtent: extent1
 		});
