@@ -135,7 +135,7 @@
 	doFlip = true;
 	firstLoop = true;
 	interval = 10000;
-    setInterval('flipImage()', interval);
+    clockid = setInterval('flipImage()', interval);
 	
 	pos = 0;
 	layerArray[pos].setVisible(true);
@@ -149,8 +149,9 @@
 			{
 				pos = 0;
 				firstLoop = false;
-				interval = 1000;
-				setInterval('flipImage()', interval);
+				interval = 2000;
+				clearInterval(clockid);
+				clockid = setInterval('flipImage()', interval);
 			}
 			layerArray[pos].setVisible(true);
 		}
