@@ -133,7 +133,9 @@
 
 //=================
 	doFlip = true;
-    setInterval('flipImage()', 2000);
+	firstLoop = true;
+	interval = 10000;
+    setInterval('flipImage()', interval);
 	
 	pos = 0;
 	layerArray[pos].setVisible(true);
@@ -144,7 +146,12 @@
 			layerArray[pos].setVisible(false);
 			pos++;
 			if (pos >= layerArray.length)
+			{
 				pos = 0;
+				firstLoop = false;
+				interval = 1000;
+				setInterval('flipImage()', interval);
+			}
 			layerArray[pos].setVisible(true);
 		}
     }
