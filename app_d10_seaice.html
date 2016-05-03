@@ -133,7 +133,6 @@
 
 //=================
 	doFlip = true;
-	firstLoop = true;
 	interval = 10000;
     clockid = setInterval('flipImage()', interval);
 	
@@ -148,7 +147,6 @@
 			if (pos >= layerArray.length)
 			{
 				pos = 0;
-				firstLoop = false;
 				interval = 2000;
 				clearInterval(clockid);
 				clockid = setInterval('flipImage()', interval);
