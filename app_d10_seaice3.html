@@ -57,6 +57,7 @@
 		　　对于海冰等变化较快的地物，以前通常只能使用气象卫星或者像MODIS这样的低空间分辨率（500米）高空间分辨率（每日）来观测。用这样的数据可以得到大范围的统计数据，但是难以指导实际的灾害救助工作。<br/><br/>
 		　　目前国内外各国的卫星数据通过共享协议实现了一个实际上的卫星群，通过组织这样的卫星群的观测数据，可以在10米尺度上实现或者接近每日一次的观测。这样的数据集在很多场合能发挥重大的效用。<br/><br/>
 		　　国产卫星的分发数据的定位精度基本上都只做到2级产品，所以相对国外的landsat8等卫星的数据有漂移，通过我们的几何精校正大致可以把D10数据集的地理绝对误差缩小到100米内。左边显示的是校正前的情况，可以看到切换的时候地物有移动；而右边显示的是校正后的情况，肉眼已经不容易看到运动了。<br/><br/>
+		　　<a onclick="javascript:hotPoint(0)" href="#">放大看位移的情况</a><br/><br/>
 		　　Pixel-Knife推出的D10数据集包含以下卫星：<br/>
 		<ul>
 			<li>HJ1A/HJ1B 30米</li>
@@ -81,6 +82,7 @@
 
 <script>
 
+	var hotpt = [[2000,4000-2000]];
 	nameArray = new Array("20151231_L7.jpg","20160101_CBERS4.jpg","20160102_GF1.jpg","20160104_CBERS4.jpg","20160106_GF1.jpg","20160108_L8.jpg","20160109_GF1.jpg","20160109_HJ.jpg","20160110_CBERS4.jpg","20160110_GF1.jpg","20160111_HJ.jpg","20160112_HJ.jpg","20160113_CBERS4.jpg","20160113_HJ.jpg","20160114_HJ.jpg","20160115_L8.jpg","20160118_GF1.jpg","20160119_CBERS4.jpg","20160120_HJ.jpg","20160122_CBERS4.jpg","20160123_L7.jpg","20160124_CBERS4.jpg","20160124_HJ.jpg","20160124_L8.jpg","20160125_CBERS4.jpg","20160125_GF1.jpg","20160126_HJ.jpg","20160127_CBERS4.jpg","20160127_HJ.jpg","20160129_GF1.jpg","20160130_CBERS4.jpg","20160130_GF1.jpg","20160131_L8.jpg","20160201_L7.jpg");
 
     var extent1 = [0, 0, 4000, 4000];
@@ -225,6 +227,35 @@
 		else
 			runFlip();
 	});
+
+//=================
+
+	function hotPoint(h)
+	{
+		view.setZoom(5);
+        var duration = 1000;
+        var start = +new Date();
+        var pan = ol.animation.pan({
+          duration: duration,
+          source: /** @type {ol.Coordinate} */ (view.getCenter()),
+          start: start
+        });
+		var st_pos = view.getCenter();
+		var dx = st_pos[0]-hotpt[h][0];
+		var dy = st_pos[1]-hotpt[h][1];
+		var d = Math.sqrt(dx*dx + dy*dy);
+		var s = Math.min(1+d/500,1.5);
+        var bounce = ol.animation.bounce({
+          duration: duration,
+          resolution: s * view.getResolution(),
+          start: start
+        });
+		map_mux10.beforeRender(pan, bounce);
+		map_pan5.beforeRender(pan, bounce);
+		map_mux20.beforeRender(pan, bounce);
+		map_psh5.beforeRender(pan, bounce);
+        view.setCenter(hotpt[h]);
+	}	
 	
 </script>
 </body>
