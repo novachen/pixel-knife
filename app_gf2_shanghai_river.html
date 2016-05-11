@@ -47,16 +47,21 @@
 
 <div class="row ah">
     <div class="col-md-2 ah scrolly">
-<div class="projects-header page-header">	 
-<h1 class="text-center">GF2 海报比较</h1>
-</div>
+		<div class="projects-header page-header">	 
+			<h1 class="text-center">GF2 海报比较</h1>
+		</div>
 
-<p>
 　　高分二号发射后经过一个多月的在轨测试后，国家国防科技工业局对外公布了<a href='http://www.sastind.gov.cn/n112/n117/c417968/content.html'>我国首批亚米级高分辨率卫星影像图</a><br/><br/>
 　　左边是发布的海报内容（这个海报还被选为《遥感学报》2014年第6期的封面），右边是像素刻刀制作的融合结果。<b>图像较大可能需要耐心等待下载</b><br/><br/>
 　　可以看到两张图像差别较大。海报并非自然色，应该将近红外波段引入增强植被绿色和水体蓝色，但是很多地方改的有点莫名其妙，比如河边上那些逐渐变成红色的树木和植被。<br/><br/>
 　　此外还值得注意的是图像上是否有过饱和的区域，那些特别亮的地方可能会在制作输出图像的时候因为简单的直方图拉伸处理被牺牲掉。海报上有很多这样的区域导致该区域的纹理丢失，整个图像的信息不完备。而在像素刻刀采取了<b>局部非线性纹理压缩</b>的技术，在的最终的结果中，除了保持整体亮度均衡（大约在灰度级128左右）没有过亮或者过暗的区域外，每个区域的纹理都能体现。<br/><br/>
 　　具体真实性可以参考<a href='img/gf2/shanghai_river/ge.jpg'>GoogleEarth的图像</a>，GE图像的不足之处就是整体太暗了些。<br/><br/>
+
+	<ul>
+	<li><a onclick="javascript:hotPoint(0)" href="#">绿色的树木怎么一到岸边就转成红色了？</a></li>
+	<li><a onclick="javascript:hotPoint(1)" href="#">大量的白色过饱和区域使得海报有效信息量减少</a></li>
+	</ul>
+
 	</div>
 	
     <div class="col-md-10 ah">
@@ -70,6 +75,10 @@
 </div>
 
 <script>
+
+	var hotpt1 = [[2529,6000-3143], [2796, 6000-2647]];
+	var hotpt2 = [[2368,4000-2307], [2619, 4000-1833]];
+
 	var extent1 = [0, 0, 4500, 6000];
     var projection1 = new ol.proj.Projection({
         code: 'xkcd-image',
@@ -163,34 +172,67 @@
         view: view2
     });	
 	
-	//===================================================
-
-	function hotPoint(h)
+	//=================
+	
+	function hotPoint1(h)
 	{
-		view.setZoom(5);
         var duration = 1000;
         var start = +new Date();
+
         var pan = ol.animation.pan({
           duration: duration,
-          source: /** @type {ol.Coordinate} */ (view.getCenter()),
+          source: /** @type {ol.Coordinate} */ (view1.getCenter()),
           start: start
         });
-		var st_pos = view.getCenter();
-		var dx = st_pos[0]-hotpt[h][0];
-		var dy = st_pos[1]-hotpt[h][1];
+		var st_pos = view1.getCenter();
+		var dx = st_pos[0]-hotpt1[h][0];
+		var dy = st_pos[1]-hotpt1[h][1];
 		var d = Math.sqrt(dx*dx + dy*dy);
 		var s = Math.min(1+d/500,1.5);
         var bounce = ol.animation.bounce({
           duration: duration,
-          resolution: s * view.getResolution(),
+          resolution: s * view1.getResolution(),
           start: start
         });
-		map_mux10.beforeRender(pan, bounce);
-		map_pan5.beforeRender(pan, bounce);
-		map_mux20.beforeRender(pan, bounce);
-		map_psh5.beforeRender(pan, bounce);
-        view.setCenter(hotpt[h]);
+
+		view1.setZoom(5);
+		map1.beforeRender(pan, bounce);
+        view1.setCenter(hotpt1[h]);
 	}	
+
+	function hotPoint2(h)
+	{
+        var duration = 1000;
+        var start = +new Date();
+
+        var pan = ol.animation.pan({
+          duration: duration,
+          source: /** @type {ol.Coordinate} */ (view2.getCenter()),
+          start: start
+        });
+		var st_pos = view2.getCenter();
+		var dx = st_pos[0]-hotpt2[h][0];
+		var dy = st_pos[1]-hotpt2[h][1];
+		var d = Math.sqrt(dx*dx + dy*dy);
+		var s = Math.min(1+d/500,1.5);
+        var bounce = ol.animation.bounce({
+          duration: duration,
+          resolution: s * view2.getResolution(),
+          start: start
+        });
+
+		view2.setZoom(5);
+		map2.beforeRender(pan, bounce);
+        view2.setCenter(hotpt2[h]);
+	}		
+	
+	function hotPoint(h)
+	{
+		hotPoint1(h);
+		hotPoint2(h);
+	}
+	
+
 </script>
 </body>
 </html>

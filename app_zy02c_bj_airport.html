@@ -52,14 +52,19 @@
 </div>
 
 <p>
-左边是资源卫星中心制作的ZY1-02C的宣传海报上的标准融合产品图像，现在在<a href="http://www.cresda.com/CN/sjfw/yxzt/index.shtml">http://www.cresda.com/CN/sjfw/yxzt/index.shtml</a>还能看到。<br/><br/>
-右边是像素刻刀的产品图像，由软件自动完成的，总体不需要人工干预，只需要根据工作需要设定几个基本参数即可。<br/><br/>
-由于HR分发产品的MTF矫正似乎做的不够，所以加了一个锐化的环节，而且这个例子中参数设得比较大。其好处是图像纹理细节更清楚了，代价是图像的噪声也同样被增强，总的来说比较适合需要目视判读的用户（ZY1-02C的用户不少是做矿山地址调查的，比较在意纹理细节）。<br/><br/>
-左侧JPG图像（3000*3000）10MB，右侧JPG图像（3285*3285）3MB。<br/>
-<b>下载需要一些时间，网速慢请等待一会。</b><br/><br/>
-由于海报图像上没有坐标系，因此没法做成联动关系，只能两边分别操作比较。<br/><br/>
-更细节的内容见<a href='http://story.ceode.ac.cn:1809/tiles/doc/zy1_02c/zy02c融合比较.ppt'>zy02c融合比较.ppt</a> <br/><br/>
+　　左边是资源卫星中心制作的ZY1-02C的宣传海报上的标准融合产品图像，现在在<a href="http://www.cresda.com/CN/sjfw/yxzt/index.shtml">http://www.cresda.com/CN/sjfw/yxzt/index.shtml</a>还能看到。<br/><br/>
+　　右边是像素刻刀的产品图像，由软件自动完成的，总体不需要人工干预，只需要根据工作需要设定几个基本参数即可。<br/><br/>
+　　由于HR分发产品的MTF矫正似乎做的不够，所以加了一个锐化的环节，而且这个例子中参数设得比较大。其好处是图像纹理细节更清楚了，代价是图像的噪声也同样被增强，总的来说比较适合需要目视判读的用户（ZY1-02C的用户不少是做矿山地址调查的，比较在意纹理细节）。<br/><br/>
+　　左侧JPG图像（3000*3000）10MB，右侧JPG图像（3285*3285）3MB。<br/>
+　　<b>下载需要一些时间，网速慢请等待一会。</b><br/><br/>
+　　由于海报图像上没有坐标系，因此没法做成联动关系，只能两边分别操作比较。<br/><br/>
 
+　　处理不好的图像，不仅仅影响美观，甚至会导致看图人做出错误的认知和判断。
+<ul>
+<li><a onclick="javascript:hotPoint(0)" href="#">机场的棚盖难道有部分掉色了吗？</a></li>
+<li><a onclick="javascript:hotPoint(1)" href="#">彩色屋顶的颜色明显脱离了</a></li>
+<li><a onclick="javascript:hotPoint(2)" href="#">飞机跑道上也不整洁，有什么问题么？</a></li>
+</ul>
 
 </p>	
 
@@ -79,7 +84,9 @@
 
 <script>
 
-	var hotpt = [[2698,4000-2519],[4630,6000-2250],[2887,6000-3501],[2319,6000-3367]];
+	var hotpt2 = [[2266,3000-2532], [733, 3000-2043], [2539, 3000-2121]];
+
+	var hotpt1 = [[2460,3285-2726], [997, 3285-2297], [2733, 3285-2376]];
 	
     var extent1 = [0, 0, 3285, 3285];
     var projection1 = new ol.proj.Projection({
@@ -176,6 +183,68 @@
         target: 'map2',
         view: view2
     });	
+	
+	//=================
+	
+	function hotPoint1(h)
+	{
+        var duration = 1000;
+        var start = +new Date();
+
+        var pan = ol.animation.pan({
+          duration: duration,
+          source: /** @type {ol.Coordinate} */ (view1.getCenter()),
+          start: start
+        });
+		var st_pos = view1.getCenter();
+		var dx = st_pos[0]-hotpt1[h][0];
+		var dy = st_pos[1]-hotpt1[h][1];
+		var d = Math.sqrt(dx*dx + dy*dy);
+		var s = Math.min(1+d/500,1.5);
+        var bounce = ol.animation.bounce({
+          duration: duration,
+          resolution: s * view1.getResolution(),
+          start: start
+        });
+
+		view1.setZoom(4);
+		map1.beforeRender(pan, bounce);
+        view1.setCenter(hotpt1[h]);
+	}	
+
+	function hotPoint2(h)
+	{
+        var duration = 1000;
+        var start = +new Date();
+
+        var pan = ol.animation.pan({
+          duration: duration,
+          source: /** @type {ol.Coordinate} */ (view2.getCenter()),
+          start: start
+        });
+		var st_pos = view2.getCenter();
+		var dx = st_pos[0]-hotpt2[h][0];
+		var dy = st_pos[1]-hotpt2[h][1];
+		var d = Math.sqrt(dx*dx + dy*dy);
+		var s = Math.min(1+d/500,1.5);
+        var bounce = ol.animation.bounce({
+          duration: duration,
+          resolution: s * view2.getResolution(),
+          start: start
+        });
+
+		view2.setZoom(4/2.5*2.4);
+		map2.beforeRender(pan, bounce);
+        view2.setCenter(hotpt2[h]);
+	}		
+	
+	function hotPoint(h)
+	{
+		hotPoint1(h);
+		hotPoint2(h);
+	}
+	
+	
 </script>
 </body>
 </html>
