@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>高分二号PAN/MS精校正前后的差异</title>
+
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/ol.css" type="text/css">
+    <script src="js/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+
+        #layertree li > span {
+            cursor: pointer;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+		
+		.nopadding {
+			padding: 0;
+		}
+				
+    </style>
+</head>
+<body>
+
+<div class="row ah">
+    <div class="col-md-2 ah scrolly">
+    <button id="switchFlipBtn" class="btn btn-primary btn-lg btn-block">按这个按钮来选择是否切换显示</button>
+<div class = "page-header">
+<h2 class="text-center">高分二号PAN/MS精校正前后的差异</h2>
+</div>
+
+
+<h3 class="text-center">解决实际工作中的困难</h3>
+　　文献《基于“高分一号”数据的地理国情普查 DOM 制作研究》中讨论了高分系列卫星在地理国情普查中制作DOM的各种工序的讨论，文中设计了三种流程，作者通过实验发现只有一种能够适用，而且还需要人工找控制点，配准的目标是只是1个像元以内。<br/><br/>
+　　“高分二号”MS是由5段CCD拼接而成，而且分发的数据拼接效果不理想，肉眼都很容易看出各个接缝的位置，在整个图像中形成了多个严重非线性扭动区域，简单使用十几个控制点用传统的多项式模型是不可能修复的。<br/><br/>
+　　Pixel-Knife的配准系统采用基于仿真的局部梯度追踪算法可以很好的处理这样的变形，在主流PC或者笔记本上，大约20分钟自动处理一景，无需任何人工干预，可以形成批处理流程，可以通过集群并行进一步提高速度。<br/><br/>
+
+<h3 class="text-center">处理结果展示</h3>
+<ul>
+<li>左上是MS和低分的PAN的比较，通常可以看到有偏移。</li>
+<li>右上是校正后MS和低分的PAN的比较，一般已经看不到偏移。</li>
+<li>左下是校正前的MS和校正后的MS的比较。</li>
+<li>右下是未校正直接融合的结果和校正后再融合的结果的比较。</li>
+</ul>
+
+
+		
+	</div>
+    <div class="col-md-5 ah nopadding">
+		<div id="map1" class="aw hh"></div>
+		<div id="map3" class="aw hh"></div>
+	</div>
+    <div class="col-md-5 ah nopadding">
+		<div id="map2" class="aw hh"></div>
+		<div id="map4" class="aw hh"></div>
+	</div>
+</div>
+
+
+<script>
+    var extent1 = [0, 0, 10000, 10000];
+    var extent2 = [0, 0, 10000, 10000];
+    var projection1 = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent1
+    });
+    var projection2 = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent2
+    });
+
+	tilebase = 'http://story.ceode.ac.cn:1809/tiles/chongqing/';
+
+	source0 = new ol.source.XYZ({
+			    attributions: [
+					new ol.Attribution({
+						html: '3.2米的全色'
+					})
+				],
+              url: tilebase+'lrpan/{z}/{x}/{-y}.png',
+			  maxZoom: 5,
+			  projection: projection1
+            });
+	
+	source1 = new ol.source.XYZ({
+			    attributions: [
+					new ol.Attribution({
+						html: '3.2米校正前'
+					})
+				],
+              url: tilebase+'lr_nrg_unr/{z}/{x}/{-y}.png',
+			  maxZoom: 5,
+			  projection: projection1
+            });
+			
+	source2 = new ol.source.XYZ({
+			    attributions: [
+					new ol.Attribution({
+						html: '3.2米校正后'
+					})
+				],
+              url: tilebase+'lr_nrg_reg/{z}/{x}/{-y}.png',
+			  maxZoom: 5,
+			  projection: projection1
+            });
+			
+	source3 = new ol.source.XYZ({
+			    attributions: [
+					new ol.Attribution({
+						html: '0.8米校正前'
+					})
+				],
+              url: tilebase+'hr_nrg_unr/{z}/{x}/{-y}.png',
+			  maxZoom: 7,
+			  projection: projection2
+            });
+			
+	source4 = new ol.source.XYZ({
+			    attributions: [
+					new ol.Attribution({
+						html: '0.8米校正后'
+					})
+				],
+              url: tilebase+'hr_nrg_reg/{z}/{x}/{-y}.png',
+			  maxZoom: 7,
+			  projection: projection2
+            });
+
+    layer0 = new ol.layer.Tile({
+        source: source0
+    });
+
+    layer01 = new ol.layer.Tile({
+        source: source1
+    });
+
+    layer1 = new ol.layer.Tile({
+        source: source1
+    });
+
+    layer02 = new ol.layer.Tile({
+        source: source2
+    });
+
+    layer2 = new ol.layer.Tile({
+        source: source2
+    });
+
+    layer3 = new ol.layer.Tile({
+        source: source3
+    });
+
+    layer4 = new ol.layer.Tile({
+        source: source4
+    });
+
+	view = new ol.View({
+        projection: projection1,
+        center: ol.extent.getCenter(extent1),
+        zoom: 3
+    });
+
+	var attribution1 = new ol.control.Attribution({
+		collapsed: false
+	});
+    var map1 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer0,
+					layer01
+                ]
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map1',
+		controls:  ol.control.defaults({attribution: false}).extend([attribution1]),
+        view: view
+    });
+
+	var attribution2 = new ol.control.Attribution({
+		collapsed: false
+	});
+    var map2 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer0,
+					layer02
+                ]
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map2',
+		controls:  ol.control.defaults({attribution: false}).extend([attribution2]),
+        view: view
+    });
+
+	var attribution3 = new ol.control.Attribution({
+		collapsed: false
+	});
+    var map3 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer1,
+					layer2
+                ]
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map3',
+		controls:  ol.control.defaults({attribution: false}).extend([attribution3]),
+        view: view
+    });
+
+	var attribution4 = new ol.control.Attribution({
+		collapsed: false
+	});
+    var map3 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer3,
+					layer4
+                ]
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map4',
+		controls:  ol.control.defaults({attribution: false}).extend([attribution4]),
+        view: view
+    });
+
+	layer0.setVisible(false);
+	layer01.setVisible(true);
+	layer02.setVisible(true);
+	layer1.setVisible(true);
+	layer2.setVisible(false);
+	layer3.setVisible(true);
+	layer4.setVisible(false);
+
+	doFlip = true;
+    setInterval('flipImage()', 1000);
+
+    function flipImage() {
+		if (doFlip)
+		{
+			layer0.setVisible(!layer0.getVisible());
+			layer01.setVisible(!layer01.getVisible());
+			layer02.setVisible(!layer02.getVisible());
+			layer1.setVisible(!layer1.getVisible());
+			layer2.setVisible(!layer2.getVisible());
+			
+			layer3.setVisible(!layer3.getVisible());
+			layer4.setVisible(!layer4.getVisible());
+		}
+    }
+
+	function stopFlip()
+	{
+		doFlip = false;
+	}
+	
+	function runFlip()
+	{
+		doFlip = true;
+	}
+	
+	var switchBtn = document.getElementById('switchFlipBtn');
+    switchBtn.addEventListener('click', function() {	
+		if (doFlip)
+			stopFlip();
+		else
+			runFlip();
+	});
+	
+</script>
+</body>
+</html>
