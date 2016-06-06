@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
 
-    <title>高分融合（复原）标准测试</title>
+    <title>精细配准标准测试</title>
 
     <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -49,39 +49,31 @@
     <div class="col-md-2 ah scrolly">
 	<button id="switchFlipBtn" class="btn btn-primary btn-lg btn-block">选择是否切换显示</button>
 		<div class="projects-header page-header">	 
-		<h2 class="text-center">高分卫星融合（复原）</h2>
+		<h2 class="text-center">高分卫星精细配准</h2>
 		<h2 class="text-center">客观测试方案</h2>
 		</div>
 
 		<p>
-		　　融合的结果好坏一直没有让大多数人信服的客观测试标准，我们这里提出一个客观性很强的测试方案。其主要原理是用高分辨率数据集缩小退化后的结果作为输入，而以原有的数据作为理想目标，各种融合算法只要用其输出和理想目标比较，越接近的显然就越好。<br/><br/>
-		　　目前商业卫星WV3的空间分辨率为全色0.3米多光谱1.2米，将其缩小4倍后可以仿真全色1.2米多光谱4.8米的卫星，这和我国主力卫星GF1(2/8米）和GF2(0.8/3.2米）很接近，而且可以将原来1.2米的多光谱数据作为理想目标。同样，类似的WV2（0.4/1.2）也可以作为测试案例的基础数据源。<br/><br/>
-		　　测试比较了三种目前广泛使用商业遥感软件的融合算法，包括ENVI5的Gram-Schmidt算法、NNDifuse算法（最新的ENVI5.3才有）、PCI2013的PanSharp算法，以及Pixel-Knife的pkRecover算法。<br/><br/>
-		　　这个测试来自一个WV2的样例数据集OR2A_Beijing_China_40cm_054000253010<br/><br/>
-		　　从右侧的图像上看（左上GS，右上NN，左下PS，右下PK，切换的比较图为原来的MS数据），GS和PS在植被、水体上变动很大，彩色屋顶也有变化；NN在整个图像的亮度上就已经有较大的差异；而PK除了一些细节边缘部分外基本上就看不出的差异。<br/><br/>
+		　　配准的结果好坏一直没有让大多数人信服的客观测试标准，我们这里提出一个客观性很强的测试方案。其主要原理是用高分辨率数据集缩小退化后的结果作为输入，这些数据原来的误差就很小，缩小以后的误差更可以忽略不计，当成理想目标。各种配准算法只要用其输出和理想目标比较，越接近的显然就越好。<br/><br/>
+		　　目前商业卫星WV3的空间分辨率为全色0.3米多光谱1.2米，将其缩小4倍后可以仿真全色1.2米多光谱4.8米的卫星，这和我国主力卫星GF1(2/8米）和GF2(0.8/3.2米）很接近。同样，类似的WV2（0.4/1.2）也可以作为测试案例的基础数据源。<br/><br/>
+		　　理想目标中的红波段不动，绿色和蓝色在matlab中加上随机扰动模拟细小的变形（在一两个像素点以内）,形成仿真的结果SIM，将该结果输入到各种自动配准算法中，观察其输出是否和理想目标接近。<br/><br/>
+		　　测试比较了ENVI5的自动配准、以及Pixel-Knife的pkRecover算法。(近期准备加上ERDAS的自动配准）<br/><br/>
+		　　这个测试来自一个WV3的样例数据集Adelaide_Australia_WV3_30cm_120cm_8bandBundle_11_27_2014<br/><br/>
+		　　从右侧的图像上看（左上仿真SIM，右上ENVI，左下PK，切换的比较图为原来的标准数据）<br/><br/>
 		</p>
 		
 		<p>
 		　　计算各种算法的结果和理想结果相减的残差（越小越好，为0表示和理想结果一模一样）：<br/>
 		<ul>
-			<li>GS:    0.045</li>
-			<li>NN:    0.046</li>
-			<li>PS:    0.044</li>
-			<li>PK:    0.036</li>
+			<li>SIM:   0.0415</li>
+			<li>ENVI:  0.0248</li>
+			<li>PK:    0.0099</li>
 		</ul>
 		</p>
 
-		<p>
-		　　另外一个保真准则是融合结果缩小4倍之后的结果应该和输入的4.8米多光谱一致，计算各种算法的结果和理想结果相减的残差（越小越好，为0表示和理想结果一模一样）：<br/>
-		<ul>
-			<li>GS:    0.020</li>
-			<li>NN:    0.031</li>
-			<li>PS:    0.022</li>
-			<li>PK:    0.006</li>
-		</ul>
-		</p>
+	
+	</div>
 
-		</div>
 
 	
     <div class="col-md-5 ah nopadding">
@@ -96,9 +88,9 @@
 
 <script>
 
-	urlbase = 'img/recover/wv2/';
-	nameArray = new Array("ms.jpeg", "gs.jpeg","nn.jpeg","ps.jpeg","pk.jpeg");
-	infoArray = new Array("原来的1.2米MS", "ENVI Gram-Schmidt","ENVI NNDiffuse","PCI2013 PanSharp","Pixel-Knife pkRecover");
+	urlbase = 'img/registration/';
+	nameArray = new Array("src.jpg", "sim.jpg","envi.jpg","pk.jpg");
+	infoArray = new Array("原来的理想数据", "红波段不动其他两个波段随机扭曲变形","ENVI自动配准","Pixel-Knife pkRegistration");
 
     var extent1 = [0, 0, 1, 1];
     var projection1 = new ol.proj.Projection({
