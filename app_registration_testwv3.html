@@ -54,20 +54,21 @@
 		</div>
 
 		<p>
-		　　配准的结果好坏一直没有让大多数人信服的客观测试标准，我们这里提出一个客观性很强的测试方案。其主要原理是用高分辨率数据集缩小退化后的结果作为输入，这些数据原来的误差就很小，缩小以后的误差更可以忽略不计，当成理想目标。各种配准算法只要用其输出和理想目标比较，越接近的显然就越好。<br/><br/>
+		　　配准的结果好坏一直没有让大多数人信服的客观测试标准，我们这里提出一个客观性很强的测试方案。其主要原理是用高分辨率数据集缩小退化后的结果作为输入，这些数据原来的误差就很小，缩小以后的误差更可以忽略不计，当成理想目标。各种配准算法用其输出和理想目标比较，越接近的显然就越好。<br/><br/>
 		　　目前商业卫星WV3的空间分辨率为全色0.3米多光谱1.2米，将其缩小4倍后可以仿真全色1.2米多光谱4.8米的卫星，这和我国主力卫星GF1(2/8米）和GF2(0.8/3.2米）很接近。同样，类似的WV2（0.4/1.2）也可以作为测试案例的基础数据源。<br/><br/>
 		　　理想目标中的红波段不动，绿色和蓝色在matlab中加上随机扰动模拟细小的变形（在一两个像素点以内）,形成仿真的结果SIM，将该结果输入到各种自动配准算法中，观察其输出是否和理想目标接近。<br/><br/>
-		　　测试比较了ENVI5的自动配准、以及Pixel-Knife的pkRecover算法。(近期准备加上ERDAS的自动配准）<br/><br/>
+		　　测试比较了ENVI5的ImageToImage自动配准、ERDAS的AutoSync以及Pixel-Knife的pkRecover算法。<br/><br/>
 		　　这个测试来自一个WV3的样例数据集Adelaide_Australia_WV3_30cm_120cm_8bandBundle_11_27_2014<br/><br/>
-		　　从右侧的图像上看（左上仿真SIM，右上ENVI，左下PK，切换的比较图为原来的标准数据）<br/><br/>
+		　　从右侧的图像上看（左上仿真SM(SIMUATION)，右上EN(ENVI)，左下ER(ERDAS)，右下下PK(Pixel-Knife)，切换的比较图为原来的标准数据）<br/><br/>
 		</p>
 		
 		<p>
 		　　计算各种算法的结果和理想结果相减的残差（越小越好，为0表示和理想结果一模一样）：<br/>
 		<ul>
-			<li>SIM:   0.0415</li>
-			<li>ENVI:  0.0248</li>
-			<li>PK:    0.0099</li>
+			<li>SM:  0.0415</li>
+			<li>EN:  0.0248</li>
+			<li>ER:  0.0373</li>
+			<li>PK:  <b>0.0099</b></li>
 		</ul>
 		</p>
 
@@ -89,8 +90,8 @@
 <script>
 
 	urlbase = 'img/registration/';
-	nameArray = new Array("src.jpg", "sim.jpg","envi.jpg","pk.jpg");
-	infoArray = new Array("原来的理想数据", "红波段不动其他两个波段随机扭曲变形","ENVI自动配准","Pixel-Knife pkRegistration");
+	nameArray = new Array("src.jpg", "sim.jpg","envi.jpg","erdas.jpg","pk.jpg");
+	infoArray = new Array("原来的理想数据", "红波段不动其他两个波段随机扭曲变形","ENVI自动配准","ERDAS AntoSync","Pixel-Knife pkRegistration");
 
     var extent1 = [0, 0, 1, 1];
     var projection1 = new ol.proj.Projection({
