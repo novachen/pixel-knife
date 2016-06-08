@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>D10示例之渤海海冰</title>
+
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+
+        #layertree li > span {
+            cursor: pointer;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+		
+        .scrolly {
+            overflow-y: auto;
+        }
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+		
+		.nopadding {
+			padding: 0;
+		}
+
+        table{ border-collapse:collapse; border:solid 1px Black; }
+        table td{ border:solid 1px Black;}
+		
+    </style>
+</head>
+<body>
+
+<div class="row ah">
+	<table>
+        <tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+            <td><div id="map1" class="map ah"></div></td>
+            <td><div id="map2" class="map ah"></div></td>
+        </tr>
+		<tr>
+            <td><div id="map3" class="map ah"></div></td>
+            <td><div id="map4" class="map ah"></div></td>
+            <td><div id="map5" class="map ah"></div></td>
+            <td><div id="map6" class="map ah"></div></td>
+            <td><div id="map7" class="map ah"></div></td>
+            <td><div id="map8" class="map ah"></div></td>
+            <td><div id="map9" class="map ah"></div></td>
+		</tr>
+		<tr>
+            <td><div id="map10" class="map ah"></div></td>
+            <td><div id="map11" class="map ah"></div></td>
+            <td><div id="map12" class="map ah"></div></td>
+            <td><div id="map13" class="map ah"></div></td>
+            <td><div id="map14" class="map ah"></div></td>
+            <td><div id="map15" class="map ah"></div></td>
+            <td><div id="map16" class="map ah"></div></td>
+		</tr>
+		<tr>
+            <td><div id="map17" class="map ah"></div></td>
+            <td><div id="map18" class="map ah"></div></td>
+            <td><div id="map19" class="map ah"></div></td>
+            <td><div id="map20" class="map ah"></div></td>
+            <td><div id="map21" class="map ah"></div></td>
+            <td><div id="map22" class="map ah"></div></td>
+            <td><div id="map23" class="map ah"></div></td>
+		</tr>
+		<tr>
+            <td><div id="map24" class="map ah"></div></td>
+            <td><div id="map25" class="map ah"></div></td>
+            <td><div id="map26" class="map ah"></div></td>
+            <td><div id="map27" class="map ah"></div></td>
+            <td><div id="map28" class="map ah"></div></td>
+            <td><div id="map29" class="map ah"></div></td>
+            <td><div id="map30" class="map ah"></div></td>
+		</tr>
+		
+        <tr>
+            <td><div id="map31" class="map ah"></div></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+        </tr>	
+	</table>
+    <div class="col-md-10 ah">
+		<div id="map" class="map ah"></div>
+    </div>
+</div>
+
+<script>
+
+	nameArray = new Array("20160101_CBERS4.jpg","20160102_GF1.jpg","","20160104_CBERS4.jpg","","20160106_GF1.jpg","20160107_CBERS4.jpg","20160108_S2A.jpg","20160109_GF1.jpg","20160110_GF1.jpg","20160111_HJ.jpg","20160112_HJ.jpg","20160113_CBERS4.jpg","20160114_HJ.jpg","20160115_L8.jpg","","20160117_GF1.jpg","20160118_GF1.jpg","20160119_CBERS4.jpg","20160120_HJ.jpg","","20160122_CBERS4.jpg","20160123_L7.jpg","20160124_L8.jpg","20160125_CBERS4.jpg","20160126_HJ.jpg","20160127_HJ.jpg","","20160129_GF1.jpg","20160130_GF1.jpg","20160131_L8.jpg");
+
+    var extent1 = [0, 0, 1, 1];
+    var projection1 = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent1
+    });
+    view = new ol.View({
+        projection: projection1,
+        center: [0.5,0.5],
+        zoom: 2
+    });
+
+
+	layerArray = new Array(nameArray.length);
+	
+	for (i = 0; i < nameArray.length; i++)
+	//for (i = 0; i < 10; i++)
+	{
+		if (nameArray[i] != "")
+		{
+		
+		source1 = new ol.source.ImageStatic({
+			attributions: [
+				new ol.Attribution({
+					html: nameArray[i]
+				})
+			],
+			url: 'img/d10/seaice2/'+nameArray[i],
+			projection: projection1,
+			imageExtent: extent1
+		});
+
+		layer1 = new ol.layer.Image({
+			source: source1
+		});
+		
+		layerArray[i] = layer1;
+		
+		var attribution1 = new ol.control.Attribution({
+			collapsed: false
+		});
+
+		var map= new ol.Map({
+			layers: [
+				new ol.layer.Group({
+					layers: [layerArray[i]]
+
+				})
+			],
+			controls:  ol.control.defaults({attribution: false}).extend([attribution1]),
+			renderer: 'canvas',
+			target: 'map' + (i + 1),
+			view: view
+		});
+		
+		}
+		
+	}
+	
+</script>
+</body>
+</html>
