@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>D10示例之渤海海冰</title>
+
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+
+        #layertree li > span {
+            cursor: pointer;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+		
+        .scrolly {
+            overflow-y: auto;
+        }
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+		
+		.nopadding {
+			padding: 0;
+		}
+		
+    </style>
+</head>
+<body>
+
+<div class="row ah">
+    <div class="col-md-2 ah scrolly">
+	<button id="switchFlipBtn" class="btn btn-primary btn-lg btn-block">选择是否切换显示</button>
+		<div class="projects-header page-header">	 
+		<h2 class="text-center">D10示例之</h2>
+		<h2 class="text-center">渤海海冰</h2>
+		</div>
+
+		<p>
+		　　对于海冰等变化较快的地物，以前通常只能使用气象卫星或者像MODIS这样的低空间分辨率（500米）高空间分辨率（每日）来观测。用这样的数据可以得到大范围的统计数据，但是难以指导实际的灾害救助工作。<br/><br/>
+		　　目前国内外各国的卫星数据通过共享协议实现了一个实际上的卫星群，通过组织这样的卫星群的观测数据，可以在10米尺度上实现或者接近每日一次的观测。这样的数据集在很多场合能发挥重大的效用。<br/><br/>
+		　　Pixel-Knife推出的D10数据集包含以下卫星：<br/>
+		<ul>
+			<li>HJ1A/HJ1B 30米</li>
+			<li>LANDSAT7/LANDSAT8 15~30米</li>
+			<li>GF1-WFV 16米</li>
+			<li>CBERS4-WFI 73米</li>
+			<li>SENTINEL2 10米</li>
+		<ul/>
+	</div>
+
+
+	
+    <div class="col-md-10 ah">
+		<div id="map" class="map ah"></div>
+    </div>
+</div>
+
+<script>
+
+	nameArray = new Array("20151231_L7.jpg","20160101_CBERS4.jpg","20160102_GF1.jpg","20160103_MODIS.jpg","20160104_CBERS4.jpg","20160105_MODIS.jpg","20160106_GF1.jpg","20160107_CBERS4.jpg","20160108_L8.jpg","20160109_GF1.jpg","20160109_HJ.jpg","20160110_CBERS4.jpg","20160110_GF1.jpg","20160111_HJ.jpg","20160112_HJ.jpg","20160113_CBERS4.jpg","20160113_HJ.jpg","20160114_HJ.jpg","20160115_L8.jpg","20160116_MODIS.jpg","20160117_GF1.jpg","20160118_GF1.jpg","20160119_CBERS4.jpg","20160120_HJ.jpg","20160121_MODIS.jpg","20160122_CBERS4.jpg","20160123_L7.jpg","20160124_CBERS4.jpg","20160124_HJ.jpg","20160124_L8.jpg","20160125_CBERS4.jpg","20160125_GF1.jpg","20160126_HJ.jpg","20160127_CBERS4.jpg","20160127_HJ.jpg","20160128_MODIS.jpg","20160129_GF1.jpg","20160130_CBERS4.jpg","20160130_GF1.jpg","20160131_L8.jpg","20160201_L7.jpg");
+
+    var extent1 = [0, 0, 1, 1];
+    var projection1 = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent1
+    });
+    view = new ol.View({
+        projection: projection1,
+        center: [0.5,0.5],
+        zoom: 3
+    });
+
+
+	layerArray = new Array(nameArray.length);
+	
+	for (i = 0; i < nameArray.length; i++)
+	{
+		source1 = new ol.source.ImageStatic({
+			attributions: [
+				new ol.Attribution({
+					html: nameArray[i]
+				})
+			],
+			url: 'img/d10/seaice2/'+nameArray[i],
+			projection: projection1,
+			imageExtent: extent1
+		});
+
+		layer1 = new ol.layer.Image({
+			source: source1
+		});
+		
+		layer1.setVisible(false);
+		
+		layerArray[i] = layer1;
+	}
+
+	var attribution1 = new ol.control.Attribution({
+		collapsed: false
+	});
+
+    var map= new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: layerArray
+
+            })
+        ],
+  		controls:  ol.control.defaults({attribution: false}).extend([attribution1]),
+		renderer: 'canvas',
+        target: 'map',
+        view: view
+    });
+
+//=================
+	doFlip = true;
+	interval = 10000;
+    clockid = setInterval('flipImage()', interval);
+	
+	pos = 0;
+	layerArray[pos].setVisible(true);
+
+    function flipImage() {
+		if (doFlip)
+		{
+			layerArray[pos].setVisible(false);
+			pos++;
+			if (pos >= layerArray.length)
+			{
+				pos = 0;
+				interval = 2000;
+				clearInterval(clockid);
+				clockid = setInterval('flipImage()', interval);
+			}
+			layerArray[pos].setVisible(true);
+		}
+    }
+
+
+	function stopFlip()
+	{
+		doFlip = false;
+	}
+	
+	function runFlip()
+	{
+		doFlip = true;
+	}
+	
+	var switchBtn = document.getElementById('switchFlipBtn');
+    switchBtn.addEventListener('click', function() {	
+		if (doFlip)
+			stopFlip();
+		else
+			runFlip();
+	});
+	
+</script>
+</body>
+</html>
