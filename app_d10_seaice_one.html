@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>D10示例之渤海海冰</title>
+
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+
+        #layertree li > span {
+            cursor: pointer;
+        }
+
+        .map {
+            height: 584px;
+            width: 708px;
+        }
+		
+        .scrolly {
+            overflow-y: auto;
+        }
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+		
+		.nopadding {
+			padding: 0;
+		}
+
+        table{ border-collapse:collapse; border:solid 1px Black; }
+        table td{ border:solid 1px Black;}
+		
+    </style>
+</head>
+<body>
+<div id="map" class="map"></div>
+</div>
+
+<script>
+
+	nameArray = new Array("20160101_CBERS4.jpg","20160102_GF1.jpg","20160103_MODIS.jpg","20160104_CBERS4.jpg","20160105_MODIS.jpg","20160106_GF1.jpg","20160107_CBERS4.jpg","20160108_S2A.jpg","20160109_GF1.jpg","20160110_GF1.jpg","20160111_HJ.jpg","20160112_HJ.jpg","20160113_CBERS4.jpg","20160114_HJ.jpg","20160115_L8.jpg","20160116_MODIS.jpg","20160117_GF1.jpg","20160118_GF1.jpg","20160119_CBERS4.jpg","20160120_HJ.jpg","20160121_MODIS.jpg","20160122_CBERS4.jpg","20160123_L7.jpg","20160124_L8.jpg","20160125_CBERS4.jpg","20160126_HJ.jpg","20160127_HJ.jpg","20160128_MODIS.jpg","20160129_GF1.jpg","20160130_GF1.jpg","20160131_L8.jpg");
+
+    var extent1 = [0, 0, 1, 1];
+    var projection1 = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent1
+    });
+    view = new ol.View({
+        projection: projection1,
+        center: [0.55,0.5],
+        zoom: 2.5
+    });
+
+
+	i = 9 -1;
+	
+	source1 = new ol.source.ImageStatic({
+		attributions: [
+			new ol.Attribution({
+				html: nameArray[i].slice(0,-4)
+			})
+		],
+		url: 'img/d10/seaice2/'+nameArray[i],
+		projection: projection1,
+		imageExtent: extent1
+	});
+
+	layer1 = new ol.layer.Image({
+		source: source1
+	});
+	
+	var attribution1 = new ol.control.Attribution({
+		collapsed: false
+	});
+
+	var map= new ol.Map({
+		layers: [
+			new ol.layer.Group({
+				layers: [ layer1 ]
+
+			})
+		],
+		controls:  ol.control.defaults({attribution: false}).extend([attribution1]),
+		renderer: 'canvas',
+		target: 'map',
+		view: view
+	});
+	
+	
+</script>
+</body>
+</html>

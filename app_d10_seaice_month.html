@@ -113,7 +113,7 @@
 
 <script>
 
-	nameArray = new Array("20160101_CBERS4.jpg","20160102_GF1.jpg","","20160104_CBERS4.jpg","","20160106_GF1.jpg","20160107_CBERS4.jpg","20160108_S2A.jpg","20160109_GF1.jpg","20160110_GF1.jpg","20160111_HJ.jpg","20160112_HJ.jpg","20160113_CBERS4.jpg","20160114_HJ.jpg","20160115_L8.jpg","","20160117_GF1.jpg","20160118_GF1.jpg","20160119_CBERS4.jpg","20160120_HJ.jpg","","20160122_CBERS4.jpg","20160123_L7.jpg","20160124_L8.jpg","20160125_CBERS4.jpg","20160126_HJ.jpg","20160127_HJ.jpg","","20160129_GF1.jpg","20160130_GF1.jpg","20160131_L8.jpg");
+	nameArray = new Array("20160101_CBERS4.jpg","20160102_GF1.jpg","20160103_MODIS.jpg","20160104_CBERS4.jpg","20160105_MODIS.jpg","20160106_GF1.jpg","20160107_CBERS4.jpg","20160108_S2A.jpg","20160109_GF1.jpg","20160110_GF1.jpg","20160111_HJ.jpg","20160112_HJ.jpg","20160113_CBERS4.jpg","20160114_HJ.jpg","20160115_L8.jpg","20160116_MODIS.jpg","20160117_GF1.jpg","20160118_GF1.jpg","20160119_CBERS4.jpg","20160120_HJ.jpg","20160121_MODIS.jpg","20160122_CBERS4.jpg","20160123_L7.jpg","20160124_L8.jpg","20160125_CBERS4.jpg","20160126_HJ.jpg","20160127_HJ.jpg","20160128_MODIS.jpg","20160129_GF1.jpg","20160130_GF1.jpg","20160131_L8.jpg");
 
     var extent1 = [0, 0, 1, 1];
     var projection1 = new ol.proj.Projection({
@@ -139,7 +139,7 @@
 		source1 = new ol.source.ImageStatic({
 			attributions: [
 				new ol.Attribution({
-					html: nameArray[i]
+					html: nameArray[i].slice(0,-4)
 				})
 			],
 			url: 'img/d10/seaice2/'+nameArray[i],
